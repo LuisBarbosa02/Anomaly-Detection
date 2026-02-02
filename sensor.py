@@ -36,7 +36,7 @@ while True:
         print("API not available!")
         break
 
-    csv_path = "model2production/data/sensor_data.csv"
+    csv_path = "Anomaly-Detection/data/sensor_data.csv"
     if not os.path.exists(csv_path):
         sensor_data.to_csv(csv_path, mode='a', index=False, header=True)
     else:
