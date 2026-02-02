@@ -4,6 +4,8 @@
 ## Table of Contents
 1. [Context](https://github.com/LuisBarbosa02/Anomaly-Detection?tab=readme-ov-file#context)
 2. [How to Use](https://github.com/LuisBarbosa02/Anomaly-Detection?tab=readme-ov-file#how-to-use)
+2.1. [Installation](https://github.com/LuisBarbosa02/Anomaly-Detection?tab=readme-ov-file#installation)
+2.2. [Running Project](https://github.com/LuisBarbosa02/Anomaly-Detection?tab=readme-ov-file#running-project)
 
 ## Context
 This project implements a real-time anomaly detection system for a wind turbine factory by using simulated sensor data.
