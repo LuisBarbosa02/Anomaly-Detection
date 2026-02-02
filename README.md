@@ -12,7 +12,7 @@ This project implements a real-time anomaly detection system for a wind turbine 
 ### Installation
 This repository requires Python 3.12.12
 
-Clone and change to repository:
+Clone and change to the repository:
 ```bash
 git clone https://github.com/LuisBarbosa02/Anomaly-Detection.git
 cd Anomaly-Detection
@@ -30,7 +30,7 @@ pip install -r requirements.txt
 ```
 
 ### Running Project
-Inside the *Anomaly-Detection* folder, start MLFlow to log model and metrics:
+Inside the *Anomaly-Detection* folder, start MLflow to log model and metrics:
 ```bash
 mlflow ui
 ```
@@ -40,7 +40,7 @@ Open another terminal and load the venv, then the model can be trained by runnin
 python -m model.train_model
 ```
 
-Inside MLFlow, add the alias "champion" to the main model version.
+Inside MLflow, add the alias "champion" to the main model version.
 
 To run the simulated sensor data on the main model, close the current MLFlow server and serve the registered model locally by running the following command inside the *Anomaly-Detection* folder:
 ```bash
