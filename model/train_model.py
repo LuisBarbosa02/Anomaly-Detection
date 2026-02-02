@@ -52,7 +52,9 @@ if input("Save into MLFlow? (True/False)") == "True":
 
         # Logging model
         mlflow.sklearn.log_model(
-            pipeline, name="anomaly_model", registered_model_name="sklearn-isolation-forest-anomaly-clas-model"
+            pipeline, name="anomaly_model",
+            registered_model_name="sklearn-isolation-forest-anomaly-clas-model",
+            alias="champion"
         )
 
         # Logging metrics
