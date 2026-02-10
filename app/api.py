@@ -39,9 +39,9 @@ def predict(features: Features):
     input_data = pd.DataFrame([features.dict()])
 
     # Make prediction
-    prediction = pipeline.predict(input_data)[0]
+    prediction = int(pipeline.predict(input_data)[0])
 
-    # Result
+	# Result
     result = features.dict()
     result['prediction'] = prediction
 
