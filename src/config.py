@@ -6,3 +6,7 @@ import os
 load_dotenv()
 
 DATA_FOLDER = os.environ['DATA_FOLDER']
+DATA_PATH = os.environ['DATA_PATH']
+PREPROCESSOR_PATH = os.environ['PREPROCESSOR_PATH']
+MODEL_PATH = os.environ['MODEL_PATH']
+PIPELINE_PATH = os.environ['PIPELINE_PATH']

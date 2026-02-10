@@ -2,3 +2,5 @@ mlflow
 pandas
 scikit-learn
 python-dotenv
+fastapi
+uvicorn
