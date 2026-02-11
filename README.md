@@ -1,5 +1,5 @@
 
-# Anomaly Detection System
+# Wind Turbine Anomaly Detection System
 
 ## Table of Contents
 1. [Context](https://github.com/LuisBarbosa02/Anomaly-Detection?tab=readme-ov-file#context)
