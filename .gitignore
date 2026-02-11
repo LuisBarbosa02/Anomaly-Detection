@@ -7,3 +7,4 @@ notebook.ipynb
 venv
 **/__pycache__/
 *.pyc
+data/sensor_data.csv
