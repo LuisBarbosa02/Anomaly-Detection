@@ -1,12 +1,13 @@
 name: Build Pipeline
 
 on:
-  workspace_dispatch:
+  workflow_dispatch:
 
 jobs:
   build-pipeline:
     runs-on: ubuntu-latest
 
+	steps:
 	- name: Checkout repository
 	  uses: actions/checkout@v4
 
