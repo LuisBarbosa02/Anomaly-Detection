@@ -23,7 +23,6 @@ def build_pipeline():
         model = mlflow.sklearn.load_model(model_uri)
     except:
         print("There is no registed model / There is no 'champion' alias on registed model!")
-        break
 
     # Build full pipeline
     pipeline = Pipeline([
