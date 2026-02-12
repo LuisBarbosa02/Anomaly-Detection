@@ -26,6 +26,7 @@ charset-normalizer==3.4.4
     # via requests
 click==8.3.1
     # via
+    #   databricks-cli
     #   flask
     #   mlflow-skinny
     #   uvicorn
@@ -39,6 +40,8 @@ cryptography==46.0.5
     #   mlflow
 cycler==0.12.1
     # via matplotlib
+databricks-cli==0.18.0
+    # via -r requirements.in
 databricks-sdk==0.86.0
     # via
     #   mlflow-skinny
@@ -120,6 +123,8 @@ numpy==2.4.2
     #   scikit-learn
     #   scipy
     #   skops
+oauthlib==3.3.1
+    # via databricks-cli
 opentelemetry-api==1.39.1
     # via
     #   mlflow-skinny
@@ -175,6 +180,8 @@ pydantic==2.12.5
     #   mlflow-tracing
 pydantic-core==2.41.5
     # via pydantic
+pyjwt==2.11.0
+    # via databricks-cli
 pyparsing==3.3.2
     # via matplotlib
 python-dateutil==2.9.0.post0
@@ -192,6 +199,7 @@ pyyaml==6.0.3
     # via mlflow-skinny
 requests==2.32.5
     # via
+    #   databricks-cli
     #   databricks-sdk
     #   docker
     #   mlflow-skinny
@@ -208,7 +216,9 @@ scipy==1.17.0
     #   scikit-learn
     #   skops
 six==1.17.0
-    # via python-dateutil
+    # via
+    #   databricks-cli
+    #   python-dateutil
 skops==0.13.0
     # via mlflow
 smmap==5.0.2
@@ -221,6 +231,8 @@ sqlparse==0.5.5
     # via mlflow-skinny
 starlette==0.52.1
     # via fastapi
+tabulate==0.9.0
+    # via databricks-cli
 threadpoolctl==3.6.0
     # via scikit-learn
 typing-extensions==4.15.0
@@ -246,6 +258,7 @@ tzdata==2025.3
     # via pandas
 urllib3==2.6.3
     # via
+    #   databricks-cli
     #   docker
     #   requests
 uvicorn==0.40.0
