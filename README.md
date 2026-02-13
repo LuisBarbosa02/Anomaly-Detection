@@ -29,6 +29,19 @@ Install the dependencies:
 pip install -r requirements.txt
 ```
 
+## Create Database
+To store the raw and predicted sensor values, a PostgreSQL database is created through Docker container:
+```bash
+docker pull postgres:18
+docker network create app_network
+docker run -d --name wind_turbine_db -e POSTGRES_USER=luis -e POSTGRES_PASSWORD=mypassword -e POSTGRES_DB=wind_db -p 5432:5432 -v wind-vol:/var/lib/postgresql --network app_network postgres:18
+```
+
+Then the tables are added by running inside the *Wind-Turbine-Anomaly-Detection* folder:
+```bash
+python -m src.data.create_db_tables
+```
+
 ## Starting Server
 The server where the model will be run must be started. This can be done locally or through Docker.
 ### Locally

@@ -6,3 +6,5 @@ fastapi
 uvicorn
 pydantic
 databricks-cli
+sqlalchemy
+psycopg2-binary
