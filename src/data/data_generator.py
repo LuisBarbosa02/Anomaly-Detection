@@ -90,7 +90,7 @@ class SensorDataGenerator:
         self.current_time += timedelta(seconds=1)
 
         return {
-            "timestamp": str(timestamp),
+            "timestamp": timestamp,
             "temperature": round(self.state.temperature, 2),
             "humidity": round(self.state.humidity, 2),
             "sound": round(self.state.sound, 2),

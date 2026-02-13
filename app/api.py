@@ -1,9 +1,15 @@
 # Import libraries
-from fastapi import FastAPI
+from .table import Base
+from .database import engine, get_db, save_prediction
+from fastapi import FastAPI, Depends
 import pickle
 from .config import PIPELINE_PATH
 from .schema import Features
+from sqlalchemy.orm import Session
 import pandas as pd
+
+# Create table automatically at startup
+Base.metadata.create_all(bind=engine)
 
 # Create application
 app = FastAPI()
@@ -31,7 +37,7 @@ def status():
 
 # App prediction
 @app.post("/predict")
-def predict(features: Features):
+def predict(features: Features, db: Session = Depends(get_db)):
     """
     Make a prediction from the served model.
     """
@@ -40,6 +46,9 @@ def predict(features: Features):
 
     # Make prediction
     prediction = int(pipeline.predict(input_data)[0])
+
+    # Save prediction
+    save_prediction(db, prediction)
 
 	# Result
     result = features.dict()

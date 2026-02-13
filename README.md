@@ -42,6 +42,38 @@ Then the tables are added by running inside the *Wind-Turbine-Anomaly-Detection*
 python -m src.data.create_db_tables
 ```
 
+The following steps must be taken inside the PostgreSQL database to configure it.
+With the database container running, run the commands:
+```bash
+docker exec -it wind_turbine_db bash
+psql -U luis -d wind_db
+```
+
+Inside PostgreSQL, create the function:
+```bash
+CREATE OR REPLACE FUNCTION enforce_sensor_data_limit()
+RETURNS TRIGGER AS $$
+BEGIN
+    DELETE FROM sensor_data
+    WHERE id IN (
+        SELECT id
+        FROM sensor_data
+        ORDER BY timestamp DESC
+        OFFSET 50000
+    );
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+And its trigger:
+```bash
+CREATE TRIGGER sensor_data_limit_trigger
+AFTER INSERT ON sensor_data
+FOR EACH ROW
+EXECUTE FUNCTION enforce_sensor_data_limit();
+```
+
 ## Starting Server
 The server where the model will be run must be started. This can be done locally or through Docker.
 ### Locally
