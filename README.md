@@ -40,12 +40,12 @@ uvicorn app.api:app --reload
 ### Through Docker
 Within the *Anomaly-Detection* folder, use Dockerfile to create a docker image:
 ```bash
-docker build -t wind-anomaly-detection .
+docker pull luisbarbosa25/wind-turbine-anomaly-detection:latest
 ```
 
 With the image built, create and run the Docker container:
 ```bash
-docker run --name wind-anomaly-detection -d -v wind-vol:/app -p 8000:8000 wind-anomaly-detection:latest
+docker run --name wind-model -d -v wind-vol:/app -p 8000:8000 luisbarbosa25/wind-turbine-anomaly-detection:latest
 ```
 
 ## Model Predictions
