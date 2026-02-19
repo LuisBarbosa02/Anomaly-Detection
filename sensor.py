@@ -49,6 +49,7 @@ def run_sensor():
 
                 else:
                     print("Prediction failed:", response.status_code)
+                    print("Response text:", response.text)
             
             except Exception as e:
                 print("API not available:", e)
