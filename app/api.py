@@ -1,6 +1,6 @@
 # Import libraries
 from .table import Base, create_limited_table
-from .database import engine, get_db, save_prediction
+from .database import engine, get_db, save_sensor_data, save_prediction
 from fastapi import FastAPI, Depends
 import pickle
 from .config import PIPELINE_PATH
@@ -47,6 +47,9 @@ def predict(features: Features, db: Session = Depends(get_db)):
     """
     Make a prediction from the served model.
     """
+    # Save sensor data
+    sensor_data = save_sensor_data(db, features)
+    
     # Arrange data
     input_data = pd.DataFrame([features.dict()])
 
@@ -54,7 +57,7 @@ def predict(features: Features, db: Session = Depends(get_db)):
     prediction = int(pipeline.predict(input_data)[0])
 
     # Save prediction
-    save_prediction(db, prediction)
+    save_prediction(db, sensor_data.id, prediction)
 
 	# Result
     result = features.dict()
