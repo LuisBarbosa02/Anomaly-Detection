@@ -37,41 +37,9 @@ docker network create app_network
 docker run -d --name wind_turbine_db -e POSTGRES_USER=luis -e POSTGRES_PASSWORD=mypassword -e POSTGRES_DB=wind_db -p 5432:5432 -v wind-vol:/var/lib/postgresql --network app_network postgres:18
 ```
 
-Then the tables are added by running inside the *Wind-Turbine-Anomaly-Detection* folder:
+Then, with the database running, the tables are added by running inside the *Wind-Turbine-Anomaly-Detection* folder:
 ```bash
 python -m src.data.create_db_tables
-```
-
-The following steps must be taken inside the PostgreSQL database to configure it.
-With the database container running, run the commands:
-```bash
-docker exec -it wind_turbine_db bash
-psql -U luis -d wind_db
-```
-
-Inside PostgreSQL, create the function:
-```bash
-CREATE OR REPLACE FUNCTION enforce_sensor_data_limit()
-RETURNS TRIGGER AS $$
-BEGIN
-    DELETE FROM sensor_data
-    WHERE id IN (
-        SELECT id
-        FROM sensor_data
-        ORDER BY timestamp DESC
-        OFFSET 50000
-    );
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-```
-
-And its trigger:
-```bash
-CREATE TRIGGER sensor_data_limit_trigger
-AFTER INSERT ON sensor_data
-FOR EACH ROW
-EXECUTE FUNCTION enforce_sensor_data_limit();
 ```
 
 ## Starting Server
