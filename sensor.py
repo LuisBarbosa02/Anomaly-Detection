@@ -30,9 +30,6 @@ def run_sensor():
             # Start time
             start_time = time.time()
 
-            # Save raw sensor data to database
-            save_sensor_database(sensor_db, sensor_data)
-
             # Make prediction request to served model
             try:
                 request_data = sensor_data.copy()
@@ -45,7 +42,9 @@ def run_sensor():
                )
 
                 if response.status_code == 200:
-                    print(response.json(), '\n')
+                    result = response.json()
+                    del result['anomaly']
+                    print(result, '\n')
 
                 else:
                     print("Prediction failed:", response.status_code)

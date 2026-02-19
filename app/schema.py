@@ -10,3 +10,4 @@ class Features(BaseModel):
     temperature: float
     humidity: float
     sound: float
+    anomaly: int
