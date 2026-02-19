@@ -3,6 +3,7 @@ from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy import BigInteger, Column, Integer, DateTime, Float, ForeignKey
 from sqlalchemy import create_engine
 from ..config import SENSOR_DATABASE_URL
+import psycopg2
 
 # Define tables
 Base = declarative_base()
@@ -38,6 +39,52 @@ class Predictions(Base):
 
     sensordata = relationship("SensorData", back_populates="predictions")
 
+# Define function and trigger for tables
+def create_limited_table():
+    """
+    Function to create a function and a trigger in PostgreSQL to limit tables to 50000 samples.
+    """
+    # Connect to database
+    conn = psycopg2.connect(SENSOR_DATABASE_URL.replace("+psycopg2", ""))
+    conn.autocommit = True
+
+    try:
+        with conn.cursor() as cursor:
+            # Create function
+            cursor.execute("""
+            CREATE OR REPLACE FUNCTION enforce_sensor_data_limit()
+            RETURNS TRIGGER AS $$
+            BEGIN
+                DELETE FROM sensor_data
+                WHERE id IN (
+                    SELECT id
+                    FROM sensor_data
+                    ORDER BY timestamp DESC
+                    OFFSET 50000
+                );
+                RETURN NEW;
+            END;
+            $$ LANGUAGE plpgsql;
+            """)
+
+            # Drop trigger if exists
+            cursor.execute("""
+            DROP TRIGGER IF EXISTS sensor_data_limit_trigger
+            ON sensor_data;
+            """)
+
+            # Create trigger
+            cursor.execute("""
+            CREATE TRIGGER sensor_data_limit_trigger
+            AFTER INSERT ON sensor_data
+            FOR EACH ROW
+            EXECUTE FUNCTION enforce_sensor_data_limit();
+            """)
+    
+    finally:
+        # Close connection
+        conn.close()
+
 # Create tables
 if __name__ == "__main__":
     # Create engine for PostgreSQL database connection
@@ -45,3 +92,6 @@ if __name__ == "__main__":
 
     # Create tables automatically at startup
     Base.metadata.create_all(engine)
+
+    # Limit tables to 50000 samples
+    create_limited_table()
