@@ -1,5 +1,5 @@
 # Import libraries
-from .table import Base
+from .table import Base, create_limited_table
 from .database import engine, get_db, save_prediction
 from fastapi import FastAPI, Depends
 import pickle
@@ -8,15 +8,21 @@ from .schema import Features
 from sqlalchemy.orm import Session
 import pandas as pd
 
-# Create table automatically at startup
-Base.metadata.create_all(bind=engine)
-
 # Create application
 app = FastAPI()
 
 # Load pipeline
 with open(PIPELINE_PATH, 'rb') as file:
     pipeline = pickle.load(file)
+
+# Run when app initializes
+@app.on_event("startup")
+def startup():
+    print("Creating tables...")
+    Base.metadata.create_all(bind=engine)
+
+    print("Creating function and trigger...")
+    create_limited_table(engine)
 
 # App home
 @app.get("/")

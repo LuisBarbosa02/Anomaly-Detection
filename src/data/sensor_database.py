@@ -2,7 +2,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from ..config import SENSOR_DATABASE_URL
-from .create_db_tables import SensorData
+from .db_table import SensorData
 
 # Create engine for postgresql database connection
 sensor_engine = create_engine(SENSOR_DATABASE_URL)
@@ -23,23 +23,26 @@ def save_sensor_database(db, sensor_data):
     """
     Function to save raw data to database
     """
-    # Save values into table
-    raw_data = SensorData(
-            timestamp=sensor_data['timestamp'],
-            temperature=sensor_data['temperature'],
-            humidity=sensor_data['humidity'],
-            sound=sensor_data['sound'],
-            anomaly=sensor_data['anomaly']
+    try:
+        # Save values into table
+        raw_data = SensorData(
+                timestamp=sensor_data['timestamp'],
+                temperature=sensor_data['temperature'],
+                humidity=sensor_data['humidity'],
+                sound=sensor_data['sound'],
+                anomaly=sensor_data['anomaly']
         )
 
-    # Add prediction to database
-    db.add(raw_data)
+        # Add prediction to database
+        db.add(raw_data)
 
-    # Commit change
-    db.commit()
+        # Commit change
+        db.commit()
 
-    # Refresh
-    db.refresh(raw_data)
+        # Refresh
+        db.refresh(raw_data)
 
-    # Close connection with database
-    db.close()
+    except Exception as e:
+        # Discard all currently uncommited changes
+        db.rollback()
+        print("Database error:", e)
