@@ -1,6 +1,6 @@
 # Import modules
 from src.data.data_generator import SensorDataGenerator
-from src.data.sensor_database import get_sensor_db, save_sensor_database
+from src.data.sensor_database import get_sensor_db
 import signal
 import time
 import requests
