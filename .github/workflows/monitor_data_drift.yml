@@ -3,24 +3,12 @@ name: Monitor Data Drift
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   check-drift:
     runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres:18
-        env:
-          POSTGRES_USER: ${{  secrets.DB_USER  }}
-          POSTGRES_PASSWORD: ${{  secrets.DB_PASSWORD  }}
-          POSTGRES_DB: ${{  secrets.DB_NAME  }}
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd="pg_isready -U ${{ secrets.DB_USER }} -d ${{ secrets.DB_NAME }}"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
 
     steps:
     - name: Checkout repository
@@ -35,9 +23,19 @@ jobs:
       run: pip install -r requirements.txt
 
     - name: Detect drift
-      env:
-        DB_USER: ${{  secrets.DB_USER  }}
-        DB_PASSWORD: ${{  secrets.DB_PASSWORD  }}
-        DB_HOST: localhost
-        DB_NAME: ${{  secrets.DB_NAME  }}
+      id: drift_check
       run: python -m src.evaluation.check_dataset_drift
+      continue-on-error: true
+
+    - name: Promote sensor_data into main_data
+      if: steps.drift_check.outcome == 'failure'
+      run: cp data/sensor_data.csv data/main_data.csv
+
+    - name: Commit and push changes
+      run: |
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com"
+        git pull
+        git add data/main_data.csv
+        git commit -m "promoted new dataset after drift detection" || echo "no changes"
+        git push

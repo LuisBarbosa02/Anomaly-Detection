@@ -1,7 +1,6 @@
 # Import libraries
-from ..config import DATA_PATH, SENSOR_DATABASE_URL
+from ..config import DATA_PATH, SENSOR_DATA_PATH
 import pandas as pd
-from sqlalchemy import create_engine
 from evidently import Report
 from evidently.presets import DataDriftPreset
 import sys
@@ -13,10 +12,9 @@ def check_dataset_drift(threshold=0.5):
     :return: Boolean
     """
     # Load data
-    reference_data = pd.read_csv(DATA_PATH) # Training data
+    reference_data = pd.read_csv(DATA_PATH).drop(columns=['timestamp', 'anomaly']) # Training data
 
-    engine = create_engine(SENSOR_DATABASE_URL)
-    new_data = pd.read_sql("SELECT id, temperature, humidity, sound FROM sensor_data", engine, index_col='id') # Sensor data
+    new_data = pd.read_csv(SENSOR_DATA_PATH, index_col='id').drop(columns=['timestamp', 'anomaly']) # Sensor data
 
     # Drift report
     report = Report([
