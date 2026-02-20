@@ -3,6 +3,9 @@ name: Import Sensor Data
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   import-data:
     runs-on: self-hosted
