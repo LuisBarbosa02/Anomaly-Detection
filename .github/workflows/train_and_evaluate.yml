@@ -1,6 +1,9 @@
 name: Train and Evaluate Model
 
 on:
+  push:
+    paths:
+      - data/main_data.csv
   workflow_dispatch:
 
 jobs:
