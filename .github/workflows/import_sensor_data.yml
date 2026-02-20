@@ -1,0 +1,28 @@
+name: Import Sensor Data
+
+on:
+  workflow_dispatch:
+
+jobs:
+  import-data:
+    runs-on: self-hosted
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Export table to csv
+      run: |
+        mkdir -p data
+        docker exec wind_turbine_db \
+        psql -U ${{  secrets.DB_USER  }} -d ${{  secrets.DB_NAME  }} \
+        -c "\COPY sensor_data TO '/tmp/sensor_data.csv' CSV HEADER"
+        docker cp wind_turbine_db:/tmp/sensor_data.csv data/sensor_data.csv
+
+    - name: Commit and push csv
+      run: |
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com"
+        git add data/sensor_data.csv
+        git commit -m "automated export of sensor_data.csv" || echo "no changes"
+        git push
